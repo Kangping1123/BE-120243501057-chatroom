@@ -1,0 +1,32 @@
+class ChatClient {
+public:
+    std::string name;
+    std::string id;
+    std::vector<std::string> messageList;
+
+    ChatClient(const std::string& n, const std::string& i) : name(n), id(i) {}
+
+    // 连接服务器方法
+    void connectToServer(std::unordered_map<std::string, ChatClient*>& serverClients) {
+        serverClients[name] = this;
+        std::cout << name << " 连接到聊天室" << std::endl;
+    }
+
+    // 发送消息方法
+    void sendMessage(const std::string& targetName, const std::string& message,
+        std::unordered_map<std::string, ChatClient*>& serverClients) {
+        if (serverClients.find(targetName) != serverClients.end()) {
+            std::cout << "[" << name << "]发送给[" << targetName << "]: " << message << std::endl;
+            serverClients[targetName]->receiveMessage(message);
+        }
+        else {
+            std::cout << "服务器: 目标客户端不存在" << std::endl;
+        }
+    }
+
+    // 接收消息方法
+    void receiveMessage(const std::string& message) {
+        messageList.push_back(message);
+        std::cout << "[" << name << "]收到消息: [" << message << "]" << std::endl;
+    }
+};
