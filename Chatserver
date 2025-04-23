@@ -1,0 +1,20 @@
+class ChatServer {
+public:
+    std::unordered_map<std::string, ChatClient*> clients;
+
+    // 注册客户端方法
+    void registerClient(ChatClient* client) {
+        clients[client->name] = client;
+    }
+
+    // 接收并转发消息方法
+    void sendMessage(const std::string& senderName, const std::string& targetName, const std::string& message) {
+        if (clients.find(targetName) != clients.end()) {
+            std::cout << "服务器向 [" << targetName << "] 发送成功" << std::endl;
+            clients[targetName]->receiveMessage(message);
+        }
+        else {
+            std::cout << "服务器: 目标客户端不存在" << std::endl;
+        }
+    }
+};
